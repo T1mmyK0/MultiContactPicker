@@ -19,4 +19,9 @@
 
     </style>
 
+    <style name="MaterialSearchViewStyle">
+        <!-- Change hint text color for edit text-->
+        <item name="android:textColorHint">#a8a8a8</item>
+    </style>
+
 </resources>
