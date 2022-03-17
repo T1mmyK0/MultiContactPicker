@@ -1,7 +1,5 @@
 package com.wafflecopter.multicontactpicker;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -109,8 +107,7 @@ class MultiContactPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             int endPos = startPos + query.length();
             if (startPos != -1) {
                 Spannable spannable = new SpannableString(originalString);
-                ColorStateList blackColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.BLACK});
-                TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blackColor, null);
+                TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, tv.getTextColors(), null);
                 spannable.setSpan(highlightSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tv.setText(spannable);
             } else {
