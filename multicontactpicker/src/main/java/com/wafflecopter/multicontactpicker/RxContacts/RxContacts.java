@@ -115,8 +115,6 @@ public class RxContacts {
                     getPhoneNumber(id, cursor, contact, hasPhoneNumberColumnIndex);
                     break;
                 case NONE:
-                    getEmail(id, contact);
-                    getPhoneNumber(id, cursor, contact, hasPhoneNumberColumnIndex);
                     break;
             }
 
