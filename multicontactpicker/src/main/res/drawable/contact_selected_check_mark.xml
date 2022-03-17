@@ -2,11 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/selection_bg_color"/>
+            <solid android:color="?colorAccent"/>
         </shape>
     </item>
     <item
-        android:drawable="@drawable/ic_action_checkmark"
+        android:drawable="@drawable/ic_check"
         android:bottom="5dp"
         android:left="5dp"
         android:right="5dp"
