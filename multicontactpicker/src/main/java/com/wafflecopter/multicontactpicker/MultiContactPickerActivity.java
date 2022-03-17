@@ -83,6 +83,8 @@ public class MultiContactPickerActivity extends AppCompatActivity implements Mat
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        tvSelectAll.setText(getString(R.string.tv_select_all_btn_text));
+
 
         adapter = new MultiContactPickerAdapter(contactList, new MultiContactPickerAdapter.ContactSelectListener() {
             @Override
