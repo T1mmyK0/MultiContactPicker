@@ -27,7 +27,7 @@ afterEvaluate {
                 from components.findByName('release')
                 groupId = 'com.wafflecopter.multicontactpicker'
                 artifactId = 'id'
-                version = Config.libraryVersion
+                version = '2.4.6'
             }
         }
     }
