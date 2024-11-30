@@ -2,10 +2,14 @@ package com.wafflecopter.multicontactpicker;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.activity.SystemBarStyle;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -13,6 +17,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +32,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,6 +62,10 @@ public class MultiContactPickerActivity extends AppCompatActivity implements Mat
     private CompositeDisposable disposables;
     private Integer animationCloseEnter, animationCloseExit;
 
+    private int toolbarPaddingRight = -1;
+    private int toolbarPaddingTop = -1;
+    private int lastInsetTop = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +80,8 @@ public class MultiContactPickerActivity extends AppCompatActivity implements Mat
         setTheme(builder.theme);
 
         setContentView(R.layout.activity_multi_contact_picker);
+
+        setupActionBar();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
@@ -170,7 +183,7 @@ public class MultiContactPickerActivity extends AppCompatActivity implements Mat
     }
 
     private void initialiseUI(MultiContactPicker.Builder builder){
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         searchView.setOnQueryTextListener(this);
 
         this.animationCloseEnter = builder.animationCloseEnter;
@@ -200,6 +213,58 @@ public class MultiContactPickerActivity extends AppCompatActivity implements Mat
             setTitle(builder.titleText);
         }
 
+    }
+
+
+
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    private void setupActionBar() {
+        EdgeToEdge.enable(this, SystemBarStyle.dark(Color.TRANSPARENT));
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Handle window insets for the status bar
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (view, insets) -> {
+            // Extract only the system bar insets
+            int insetTop = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            int insetRight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).right;
+            int insetLeft = insets.getInsets(WindowInsetsCompat.Type.systemBars()).left;
+            //int insetBottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+            if(toolbarPaddingRight == -1) {
+                toolbarPaddingRight = toolbar.getPaddingRight();
+            }
+            if(toolbarPaddingTop == -1) {
+                toolbarPaddingTop = toolbar.getPaddingTop();
+            }
+
+            // Apply the top padding to the Toolbar
+            toolbar.setPadding(
+                    toolbarPaddingRight + insetLeft,
+                    toolbarPaddingTop + insetTop,
+                    toolbarPaddingRight + insetRight,
+                    toolbar.getPaddingBottom()
+            );
+
+            ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
+            layoutParams.height = layoutParams.height - lastInsetTop + insetTop; // Increase the height
+            toolbar.setLayoutParams(layoutParams);
+            lastInsetTop = insetTop;
+
+            MaterialSearchView search_view = findViewById(R.id.search_view);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) search_view.getLayoutParams();
+            params.setMargins(
+                    insetLeft,  // Left margin
+                    insetTop, // Preserve existing top margin
+                    insetRight, // Right margin
+                    params.bottomMargin // Bottom margin
+            );
+
+            // Return the original WindowInsetsCompat object
+            return insets;
+        });
     }
 
 
