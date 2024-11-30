@@ -10,17 +10,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
         }
     }
     namespace 'com.wafflecopter.multicontactpicker'
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     buildFeatures {
-        viewBinding true
         buildConfig true
     }
 }
@@ -30,6 +25,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.findByName('release')
+                groupId = 'com.wafflecopter.multicontactpicker'
+                artifactId = 'id'
+                version = Config.libraryVersion
             }
         }
     }
