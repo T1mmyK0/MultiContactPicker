@@ -23,8 +23,14 @@ android {
 afterEvaluate {
     publishing {
         publications {
-            release(MavenPublication) {
-                from components.findByName('release')
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.T1mmyK0"
+                artifactId = "MultiContactPicker"
+                version = "2.4.9"
+            }
+            repositories {
+                mavenLocal()
             }
         }
     }
