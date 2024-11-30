@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.kotlin.android'
 android {
+    namespace = "com.wafflecopter.multicontactpicker"
+
     defaultConfig {
         minSdkVersion 21
         compileSdk 35
@@ -13,7 +16,14 @@ android {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
-    namespace 'com.wafflecopter.multicontactpicker'
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
     buildFeatures {
         buildConfig true
@@ -23,14 +33,11 @@ android {
 afterEvaluate {
     publishing {
         publications {
-            create<MavenPublication>("release") {
+            release(MavenPublication) {
                 from(components["release"])
                 groupId = "com.github.T1mmyK0"
                 artifactId = "MultiContactPicker"
-                version = "2.4.9"
-            }
-            repositories {
-                mavenLocal()
+                version = "2.5.0"
             }
         }
     }
