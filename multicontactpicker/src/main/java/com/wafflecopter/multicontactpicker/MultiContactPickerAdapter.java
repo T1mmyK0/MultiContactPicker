@@ -103,9 +103,9 @@ class MultiContactPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void highlightTerm(TextView tv, String query, String originalString){
         if (query != null && !query.isEmpty()) {
-            int startPos = originalString.toLowerCase().indexOf(query.toLowerCase());
-            int endPos = startPos + query.length();
+            int startPos = indexOfIgnoreCase(originalString, query);
             if (startPos != -1) {
+                int endPos = startPos + query.length();
                 Spannable spannable = new SpannableString(originalString);
                 TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, tv.getTextColors(), null);
                 spannable.setSpan(highlightSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -116,6 +116,16 @@ class MultiContactPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else {
             tv.setText(originalString);
         }
+    }
+
+    private int indexOfIgnoreCase(String text, String query) {
+        int max = text.length() - query.length();
+        for (int i = 0; i <= max; i++) {
+            if (text.regionMatches(true, i, query, 0, query.length())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     protected void setAllSelected(boolean isAll){
